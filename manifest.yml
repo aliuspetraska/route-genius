@@ -2,7 +2,7 @@
 applications:
 - name: routegenius
   host: routegenius
-  memory: 1024M
+  memory: 512M
   buildpack: https://github.com/cloudfoundry/dotnet-core-buildpack.git
   timeout: 180
   services:
