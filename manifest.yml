@@ -1,0 +1,12 @@
+---
+applications:
+- name: routegenius
+  host: routegenius
+  memory: 1024M
+  buildpack: https://github.com/cloudfoundry/dotnet-core-buildpack.git
+  timeout: 180
+  services:
+  - availability-monitoring-auto
+  env:
+    PUBLISH_RELEASE_CONFIG: true
+    CACHE_NUGET_PACKAGES: false

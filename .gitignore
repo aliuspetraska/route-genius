@@ -287,4 +287,17 @@ __pycache__/
 *.odx.cs
 *.xsd.cs
 
+.vs/
+.vscode/
+.idea/
+artifacts/
+bin/
+obj/
+*.sln
+*.xproj
+*.xproj.user
+README.md
+project.lock.json
+Properties/
+vcap-local.json
 .DS_Store
