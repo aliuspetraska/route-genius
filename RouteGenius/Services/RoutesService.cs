@@ -383,12 +383,15 @@ namespace RouteGenius.Services
 
         public async Task<List<Result>> GetRoutes(RequestParameters parameters, int number)
         {
-            var series = Enumerable.Range(1, number);
-
-            var results =
-                await Task.WhenAll(series.Select(i => GetRouteDirections(
-                    GetCirclePoints(parameters, i), parameters)
-                ));
+            var results = new List<OpenDirections>();
+            
+            for (var i = 0; i < number; i++)
+            {
+                var circle = GetCirclePoints(parameters, i);
+                var result = await GetRouteDirections(circle, parameters);
+                
+                results.Add(result);
+            }
 
             var response = new List<Result>();
 
