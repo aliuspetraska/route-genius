@@ -168,10 +168,15 @@ namespace RouteGenius.Services
             }
         }
         
+        private static readonly Random Random = new Random();
+        private static readonly object SyncLock = new object();
+        
         private static double GetRandomNumber(double minimum, double maximum)
-        { 
-            var random = new Random();
-            return random.NextDouble() * (maximum - minimum) + minimum;
+        {
+            lock (SyncLock)
+            {
+                return Random.NextDouble() * (maximum - minimum) + minimum;
+            }
         }
         
         private static List<LatLng> CleanDuplicates(List<LatLng> data)
