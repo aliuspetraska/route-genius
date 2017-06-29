@@ -5,7 +5,7 @@ namespace RouteGenius.Models
 {
     public class RequestParameters
     {
-        public Coordinates StartFrom { get; set; }
+        public Coordinates StartLocation { get; set; }
         public int LengthInMeters { get; set; }
         public int TravelMode { get; set; }
         public int TravelHeading { get; set; }

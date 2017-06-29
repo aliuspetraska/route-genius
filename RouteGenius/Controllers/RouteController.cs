@@ -5,24 +5,119 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using RouteGenius.Models;
 
-namespace RouteGenius.Services
+namespace RouteGenius.Controllers
 {
-    public class RoutesService : IRoutesService
+    [Route("api/[controller]")]
+    public class RouteController : Controller
     {
-        private const int CirclePoints = 8;
+        private static readonly Random Random = new Random();
+        
+        private static readonly object SyncLock = new object();
         
         private const string MapQuestApiKey = "zdcAhYGOGYS6zamXvL11tC2ClV083I2z";
         
         private static readonly HttpClient HttpClient = new HttpClient();
         
-        public RoutesService()
+        [HttpGet]
+        public JsonResult Get()
         {
+            var parameters = new RequestParameters
+            {
+                LengthInMeters = 10000,
+                TravelHeading = 0,
+                TravelDirection = 0,
+                StartLocation = new Coordinates
+                {
+                    Lat = 54.69422,
+                    Lng = 25.28386
+                }
+            };
+
+            var results = GetExactNumberOfUniqueOpenDirections(parameters, 5);
             
+            var response = new List<Result>();
+
+            foreach (var result in results)
+            {
+                var cleaned = CleanDuplicates(
+                    CleanTails(result));
+                
+                var distance = CalculateTotalDistance(cleaned);
+                
+                var thumbnail = GetStaticMapImage(cleaned);
+                
+                response.Add(new Result
+                {
+                    Coordinates = cleaned,
+                    Distance = distance,
+                    Thumbnail = thumbnail
+                });
+            }
+            
+            return Json(response);
         }
-  
+
+        private static IEnumerable<OpenDirections> GetExactNumberOfUniqueOpenDirections(RequestParameters parameters, int number)
+        {
+            var openDirections = new List<OpenDirections>();
+            
+            while (openDirections.Count < number)
+            {
+                var receivedOnes = GetExactNumberOfOpenDirections(parameters, (number - openDirections.Count));
+
+                foreach (var receivedOne in receivedOnes)
+                {
+                    // TODO: check if not an error, but it might be dangerous if request is too complex
+                    
+                    if (receivedOne.Route != null && receivedOne.Info.Statuscode == 0)
+                    {
+                        var unique = true;
+                        
+                        foreach (var openDirection in openDirections)
+                        {
+                            if (openDirection.Route.Shape.ShapePoints.All(receivedOne.Route.Shape.ShapePoints.Contains))
+                            {
+                                unique = false;
+                            }
+                        }
+
+                        if (unique)
+                        {
+                            openDirections.Add(receivedOne);
+                        }
+                    }
+                }
+            }
+
+            return openDirections;
+        }
+
+        private static IEnumerable<OpenDirections> GetExactNumberOfOpenDirections(RequestParameters parameters, int number)
+        {
+            var circles = new List<IEnumerable<Coordinates>>();
+            
+            for (var i = 0; i < number; i++)
+            {
+                var circle = GenerateRandomCirclePoints(parameters);
+                circles.Add(circle);
+            }
+            
+            var routes = Task.WhenAll(circles.Select(circle => GetRouteDirections(circle, parameters)).ToList()).Result;
+
+            var openDirections = new List<OpenDirections>();
+            
+            foreach (var route in routes)
+            {
+                openDirections.Add(route);
+            }
+
+            return openDirections;
+        }
+        
         private static async Task<OpenDirections> GetRouteDirections(IEnumerable<Coordinates> circle, RequestParameters parameters)
         {
             var locations = new List<RequestLocation>
@@ -31,8 +126,8 @@ namespace RouteGenius.Services
                 {
                     LatLng = new Coordinates
                     {
-                        Lat = parameters.StartFrom.Lat,
-                        Lng = parameters.StartFrom.Lng
+                        Lat = parameters.StartLocation.Lat,
+                        Lng = parameters.StartLocation.Lng
                     }
                 }
             };
@@ -51,8 +146,8 @@ namespace RouteGenius.Services
             {
                 LatLng = new Coordinates
                 {
-                    Lat = parameters.StartFrom.Lat,
-                    Lng = parameters.StartFrom.Lng
+                    Lat = parameters.StartLocation.Lat,
+                    Lng = parameters.StartLocation.Lng
                 }
             });
 
@@ -85,24 +180,26 @@ namespace RouteGenius.Services
             return new OpenDirections();
         }
         
-        private static IEnumerable<Coordinates> GetCirclePoints(RequestParameters parameters, int random)
+        private static IEnumerable<Coordinates> GenerateRandomCirclePoints(RequestParameters parameters)
         {
-            var radius = (parameters.LengthInMeters + (random * 100)) / 2.0 / Math.PI;
+            var radius = GetPlusMinusTenPercentRouteLenght(parameters.LengthInMeters) / 2.0 / Math.PI;
+
+            var circlePoints = Math.Round(GetRandomNumber(4.0, 12.0));
 
             var degrees = new List<double>();
 
-            var direction = GetDirectionRadians(parameters.TravelHeading);
+            var direction = GetDirectionRadiansByTravelHeading(parameters.TravelHeading);
 
             var dx = radius * Math.Cos(direction);
             var dy = radius * Math.Sin(direction);
             
             var deltaLat = dy / 110540.0;
-            var deltaLon = dx / (111320.0 * Math.Cos(parameters.StartFrom.Lat * Math.PI / 180.0));
+            var deltaLon = dx / (111320.0 * Math.Cos(parameters.StartLocation.Lat * Math.PI / 180.0));
             
             var center = new Coordinates
             {
-                Lat = parameters.StartFrom.Lat + deltaLat,
-                Lng = parameters.StartFrom.Lng + deltaLon
+                Lat = parameters.StartLocation.Lat + deltaLat,
+                Lng = parameters.StartLocation.Lng + deltaLon
             };
             
             degrees.Add(direction + Math.PI);
@@ -111,9 +208,9 @@ namespace RouteGenius.Services
             
             var circlePointsCollection = new List<Coordinates>();
 
-            for (var i = 1; i < CirclePoints + 1; i++)
+            for (var i = 1; i < circlePoints + 1; i++)
             {
-                degrees.Add(degrees[i - 1] + sign * 2.0 * Math.PI / (CirclePoints + 1));
+                degrees.Add(degrees[i - 1] + sign * 2.0 * Math.PI / (circlePoints + 1));
 
                 dx = radius * Math.Cos(degrees[i]);
                 dy = radius * Math.Sin(degrees[i]);
@@ -141,7 +238,7 @@ namespace RouteGenius.Services
             return 1.0;
         }
         
-        private static double GetDirectionRadians(int travelHeading)
+        private static double GetDirectionRadiansByTravelHeading(int travelHeading)
         {
             switch (travelHeading)
             {
@@ -168,8 +265,10 @@ namespace RouteGenius.Services
             }
         }
         
-        private static readonly Random Random = new Random();
-        private static readonly object SyncLock = new object();
+        private static double GetPlusMinusTenPercentRouteLenght(int lengthInMeters)
+        {
+            return lengthInMeters * GetRandomNumber(0.9, 1.1);
+        }
         
         private static double GetRandomNumber(double minimum, double maximum)
         {
@@ -178,8 +277,8 @@ namespace RouteGenius.Services
                 return Random.NextDouble() * (maximum - minimum) + minimum;
             }
         }
-        
-        private static List<LatLng> CleanDuplicates(List<LatLng> data)
+
+        private static List<LatLng> CleanDuplicates(IReadOnlyList<LatLng> data)
         {
             var cleaned = new List<LatLng>
             {
@@ -196,7 +295,7 @@ namespace RouteGenius.Services
             
             return cleaned;
         }
-
+        
         private static List<LatLng> CleanTails(OpenDirections route)
         {
             var routeLatLng = new List<Location>();
@@ -304,7 +403,7 @@ namespace RouteGenius.Services
 
             return newPath;
         }
-
+        
         private static double LatLngDistance(double lat1, double lng1, double lat2, double lng2)
         {
             const double r = 6371.0;
@@ -327,10 +426,15 @@ namespace RouteGenius.Services
             {
                 total += LatLngDistance(cleaned[i].Lat, cleaned[i].Lng, cleaned[i + 1].Lat, cleaned[i + 1].Lng);
             }
-            
-            Console.WriteLine(Math.Round(total * 1000));
 
             return Math.Round(total * 1000);
+        }
+        
+        private static string GetStaticMapImage(IReadOnlyList<LatLng> cleaned)
+        {
+            var mapUrl = "https://open.mapquestapi.com/staticmap/v5/map?key=" + MapQuestApiKey + "&shape=weight:2|border:ff0000|" + PointsBuilder(cleaned, "|") + "&size=400,400&type=light";
+            
+            return mapUrl;
         }
         
         private static string PointsBuilder(IReadOnlyList<LatLng> cleaned, string separator)
@@ -376,53 +480,5 @@ namespace RouteGenius.Services
 
             return string.Join(separator, pointsCollection);
         }
-        
-        private static string GetStaticMap(IReadOnlyList<LatLng> cleaned)
-        {
-            var mapUrl = "https://open.mapquestapi.com/staticmap/v5/map?key=" + MapQuestApiKey + "&shape=weight:2|border:ff0000|" + PointsBuilder(cleaned, "|") + "&size=400,400&type=light";
-            
-            return mapUrl;
-        }
-        
-        // --- //
-
-        public async Task<List<Result>> GetRoutes(RequestParameters parameters, int number)
-        {
-            var results = new List<OpenDirections>();
-            
-            for (var i = 0; i < number; i++)
-            {
-                var circle = GetCirclePoints(parameters, i);
-                var result = await GetRouteDirections(circle, parameters);
-                
-                results.Add(result);
-            }
-
-            var response = new List<Result>();
-
-            foreach (var route in results)
-            {
-                if (route.Route != null && route.Info.Statuscode == 0)
-                {
-                    var cleaned = CleanDuplicates(CleanTails(route));
-                    var distance = CalculateTotalDistance(cleaned);
-                    var thumbnail = GetStaticMap(cleaned);
-                    
-                    response.Add(new Result
-                    {
-                        Coordinates = cleaned,
-                        Distance = distance,
-                        Thumbnail = thumbnail
-                    });
-                }
-            }
-            
-            return response;
-        }
-    }
-
-    public interface IRoutesService
-    {
-        Task<List<Result>> GetRoutes(RequestParameters parameters, int number);
     }
 }
