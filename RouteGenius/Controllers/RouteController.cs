@@ -37,7 +37,7 @@ namespace RouteGenius.Controllers
                 }
             };
 
-            var results = GetExactNumberOfUniqueOpenDirections(parameters, 5);
+            var results = GetExactNumberOfUniqueOpenDirections(parameters, 25);
             
             var response = new List<Result>();
 
