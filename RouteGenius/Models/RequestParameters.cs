@@ -5,17 +5,40 @@ namespace RouteGenius.Models
 {
     public class RequestParameters
     {
+        [JsonProperty("startLocation")]
         public Coordinates StartLocation { get; set; }
+        
+        [JsonProperty("lengthInMeters")]
         public int LengthInMeters { get; set; }
+        
+        [JsonProperty("travelHeading")]
         public int TravelHeading { get; set; }
+        
+        [JsonProperty("travelDirection")]
         public int TravelDirection { get; set; }
+        
+        [JsonProperty("unit")]
         public string Unit { get; set; }
+        
+        [JsonProperty("routeType")]
         public string RouteType { get; set; }
+        
+        [JsonProperty("locale")]
         public string Locale { get; set; }
+        
+        [JsonProperty("avoids")]
         public List<string> Avoids { get; set; }
+        
+        [JsonProperty("cyclingRoadFactor")]
         public double CyclingRoadFactor { get; set; }
+        
+        [JsonProperty("roadGradeStrategy")]
         public string RoadGradeStrategy { get; set; }
+        
+        [JsonProperty("drivingStyle")]
         public int DrivingStyle { get; set; }
+        
+        [JsonProperty("numberOfItems")]
         public int NumberOfItems { get; set; }
     }
     

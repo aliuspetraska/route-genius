@@ -192,12 +192,13 @@
                     avoids: buildAvoidsArray(),
                     cyclingRoadFactor: parseFloat($('#cyclingRoadFactor').val()),
                     roadGradeStrategy: $('#roadGradeStrategy').val(),
+                    drivingStyle: 2,
                     numberOfItems: parseInt($('#numberOfItems').val())
                 };
 
                 console.log(request);
 
-                $.post("https://routegenius.mybluemix.net/api/route", request, function(data) {
+                $.post("https://routegenius.mybluemix.net/api/route", JSON.stringify(request), function(data) {
                     console.log(data);
                 });
             });

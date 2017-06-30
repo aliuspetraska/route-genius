@@ -27,7 +27,17 @@ namespace RouteGenius.Controllers
         public JsonResult Post()
         {
             var postData = new StreamReader(Request.Body).ReadToEnd();
-            return Json(postData);
+
+            try
+            {
+                var parameters = JsonConvert.DeserializeObject<RequestParameters>(postData);
+                
+                
+            }
+            catch
+            {
+                return Json(new object());
+            }
         }
 
         [HttpGet]
