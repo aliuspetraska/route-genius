@@ -32,7 +32,28 @@ namespace RouteGenius.Controllers
             {
                 var parameters = JsonConvert.DeserializeObject<RequestParameters>(postData);
                 
+                var results = GetExactNumberOfUniqueOpenDirections(parameters);
+            
+                var response = new List<Result>();
+
+                foreach (var result in results)
+                {
+                    var cleaned = CleanDuplicates(
+                        CleanTails(result));
                 
+                    var distance = CalculateTotalDistance(cleaned);
+                
+                    var thumbnail = GetStaticMapImage(cleaned);
+                
+                    response.Add(new Result
+                    {
+                        Coordinates = cleaned,
+                        Distance = distance,
+                        Thumbnail = thumbnail
+                    });
+                }
+            
+                return Json(response);
             }
             catch
             {
