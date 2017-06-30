@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -21,7 +22,14 @@ namespace RouteGenius.Controllers
         private const string MapQuestApiKey = "zdcAhYGOGYS6zamXvL11tC2ClV083I2z";
         
         private static readonly HttpClient HttpClient = new HttpClient();
-        
+
+        [HttpPost]
+        public JsonResult Post()
+        {
+            var postData = new StreamReader(Request.Body).ReadToEnd();
+            return Json(postData);
+        }
+
         [HttpGet]
         public JsonResult Get()
         {
