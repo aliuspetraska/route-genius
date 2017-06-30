@@ -7,12 +7,15 @@ namespace RouteGenius.Models
     {
         public Coordinates StartLocation { get; set; }
         public int LengthInMeters { get; set; }
-        public int TravelMode { get; set; }
         public int TravelHeading { get; set; }
         public int TravelDirection { get; set; }
-        public bool AvoidHighways { get; set; }
-        public bool AvoidFerries { get; set; }
-        public int UnitSystem { get; set; }
+        public string Unit { get; set; }
+        public string RouteType { get; set; }
+        public string Locale { get; set; }
+        public List<string> Avoids { get; set; }
+        public double CyclingRoadFactor { get; set; }
+        public string RoadGradeStrategy { get; set; }
+        public int DrivingStyle { get; set; }
     }
     
     public class Coordinates
@@ -70,6 +73,12 @@ namespace RouteGenius.Models
 
         [JsonProperty("highwayEfficiency")]
         public double HighwayEfficiency { get; set; }
+        
+        [JsonProperty("cyclingRoadFactor")]
+        public double CyclingRoadFactor { get; set; }
+        
+        [JsonProperty("roadGradeStrategy")]
+        public string RoadGradeStrategy { get; set; }
     }
 
     public class DirectionsRequest

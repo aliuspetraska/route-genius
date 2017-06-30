@@ -27,14 +27,24 @@ namespace RouteGenius.Controllers
         {
             var parameters = new RequestParameters
             {
-                LengthInMeters = 10000,
-                TravelHeading = 0,
-                TravelDirection = 0,
                 StartLocation = new Coordinates
                 {
                     Lat = 54.69422,
                     Lng = 25.28386
-                }
+                },
+                LengthInMeters = 10000,
+                TravelHeading = 0,
+                TravelDirection = 0,
+                Unit = "k",
+                RouteType = "fastest",
+                Locale = "en_US",
+                Avoids = new List<string>
+                {
+                    "Ferry", "Toll Road", "Country Border Crossing"
+                },
+                CyclingRoadFactor = 1.0,
+                RoadGradeStrategy = "DEFAULT_STRATEGY",
+                DrivingStyle = 2
             };
 
             var results = GetExactNumberOfUniqueOpenDirections(parameters, 25);
@@ -71,7 +81,7 @@ namespace RouteGenius.Controllers
 
                 foreach (var receivedOne in receivedOnes)
                 {
-                    // TODO: check if not an error, but it might be dangerous if request is too complex
+                    // TODO: check if not an error, because it might be dangerous if request is too complex
                     
                     if (receivedOne.Route != null && receivedOne.Info.Statuscode == 0)
                     {
@@ -151,19 +161,23 @@ namespace RouteGenius.Controllers
                 }
             });
 
+            // https://developer.mapquest.com/documentation/open/directions-api/route/post/
+            
             var json = JsonConvert.SerializeObject(new DirectionsRequest
             {
                 Locations = locations,
                 Options = new RequestOptions
                 {
-                    Avoids = new List<string>(),
-                    Locale = "en_US",
-                    Unit = "k",
-                    Generalize = 0,
-                    ShapeFormat = "raw",
+                    Unit = parameters.Unit,
+                    RouteType = parameters.RouteType,
+                    Locale = parameters.Locale,
+                    Avoids = parameters.Avoids,
+                    CyclingRoadFactor = parameters.CyclingRoadFactor,
+                    RoadGradeStrategy = parameters.RoadGradeStrategy,
+                    DrivingStyle = parameters.DrivingStyle,
                     NarrativeType = "text",
-                    RouteType = "fastest",
-                    DrivingStyle = 2
+                    Generalize = 0,
+                    ShapeFormat = "raw"
                 }
             });
 
