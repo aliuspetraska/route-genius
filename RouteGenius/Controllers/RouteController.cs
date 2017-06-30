@@ -44,10 +44,11 @@ namespace RouteGenius.Controllers
                 },
                 CyclingRoadFactor = 1.0,
                 RoadGradeStrategy = "DEFAULT_STRATEGY",
-                DrivingStyle = 2
+                DrivingStyle = 2,
+                NumberOfItems = 25
             };
 
-            var results = GetExactNumberOfUniqueOpenDirections(parameters, 25);
+            var results = GetExactNumberOfUniqueOpenDirections(parameters);
             
             var response = new List<Result>();
 
@@ -71,13 +72,13 @@ namespace RouteGenius.Controllers
             return Json(response);
         }
 
-        private static IEnumerable<OpenDirections> GetExactNumberOfUniqueOpenDirections(RequestParameters parameters, int number)
+        private static IEnumerable<OpenDirections> GetExactNumberOfUniqueOpenDirections(RequestParameters parameters)
         {
             var openDirections = new List<OpenDirections>();
             
-            while (openDirections.Count < number)
+            while (openDirections.Count < parameters.NumberOfItems)
             {
-                var receivedOnes = GetExactNumberOfOpenDirections(parameters, (number - openDirections.Count));
+                var receivedOnes = GetExactNumberOfOpenDirections(parameters, (parameters.NumberOfItems - openDirections.Count));
 
                 foreach (var receivedOne in receivedOnes)
                 {

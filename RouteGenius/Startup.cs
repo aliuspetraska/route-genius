@@ -46,6 +46,9 @@ namespace RouteGenius
             app.UseCors("CorsPolicy");
 
             app.UseMvc();
+            
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
         }
     }
 }

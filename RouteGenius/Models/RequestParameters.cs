@@ -16,6 +16,7 @@ namespace RouteGenius.Models
         public double CyclingRoadFactor { get; set; }
         public string RoadGradeStrategy { get; set; }
         public int DrivingStyle { get; set; }
+        public int NumberOfItems { get; set; }
     }
     
     public class Coordinates
