@@ -15,162 +15,159 @@
 </head>
 <body>
     <!-- // -->
-    <div class="container">
-        <div class="page-header">
-            <h1>Options</h1>
-        </div>
-
-        <form class="form-horizontal">
-            <div class="form-group">
-                <label for="startLocation" class="col-sm-2 control-label">Start Location</label>
-                <div class="col-sm-4">
-                    <input type="text" class="form-control" id="startLocation" placeholder="54.69422, 25.28386" value="54.69422, 25.28386" />
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="lengthInMeters" class="col-sm-2 control-label">Length In Meters</label>
-                <div class="col-sm-4">
-                    <input type="text" class="form-control" id="lengthInMeters" placeholder="10000" value="10000" />
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="travelHeading" class="col-sm-2 control-label">Travel Heading</label>
-                <div class="col-sm-4">
-                    <select class="form-control" id="travelHeading" aria-describedby="helpBlock1">
-                        <option value="0" selected>Any</option>
-                        <option value="1">North</option>
-                        <option value="2">Northeast</option>
-                        <option value="3">East</option>
-                        <option value="4">Southeast</option>
-                        <option value="5">South</option>
-                        <option value="6">Southwest</option>
-                        <option value="7">West</option>
-                        <option value="8">Northwest</option>
-                    </select>
-                    <span id="helpBlock1" class="help-block">North, South, etc.</span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="travelDirection" class="col-sm-2 control-label">Travel Direction</label>
-                <div class="col-sm-4">
-                    <select class="form-control" id="travelDirection" aria-describedby="helpBlock2">
-                        <option value="0" selected>Clockwise</option>
-                        <option value="1">Counter-Clockwise</option>
-                    </select>
-                    <span id="helpBlock2" class="help-block">Think of this in terms of right and left turns. CW: more right turns. CCW: more left turns.</span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="unit" class="col-sm-2 control-label">Unit</label>
-                <div class="col-sm-4">
-                    <select class="form-control" id="unit">
-                        <option value="k" selected>Kilometers</option>
-                        <option value="m">Miles</option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="routeType" class="col-sm-2 control-label">Route Type</label>
-                <div class="col-sm-4">
-                    <select class="form-control" id="routeType">
-                        <option value="fastest" selected>Car/Motorcycle</option>
-                        <option value="bicycle">Bicycle</option>
-                        <option value="pedestrian">Pedestrian</option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="locale" class="col-sm-2 control-label">Locale</label>
-                <div class="col-sm-4">
-                    <select class="form-control" id="locale">
-                        <option value="en_US" selected>en_US</option>
-                        <option value="en_GB">en_GB</option>
-                        <option value="fr_CA">fr_CA</option>
-                        <option value="fr_FR">fr_FR</option>
-                        <option value="de_DE">de_DE</option>
-                        <option value="es_ES">es_ES</option>
-                        <option value="es_MX">es_MX</option>
-                        <option value="ru_RU">ru_RU</option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-2 control-label">Avoids</label>
-                <div class="col-sm-10">
-                    <div class="checkbox">
-                        <label><input id="checkbox1" type="checkbox" value="Limited Access" checked>Limited Access (highways)</label>
+    <div class="container" style="padding: 50px 0;">
+        <div class="row">
+            <div class="col-sm-8">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="startLocation" class="col-sm-2 control-label">Start Location</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="startLocation" placeholder="54.69422, 25.28386" value="54.69422, 25.28386" />
+                        </div>
                     </div>
-                </div>
-                <div class="col-sm-offset-2 col-sm-10">
-                    <div class="checkbox">
-                        <label><input id="checkbox2" type="checkbox" value="Toll Road">Toll Road</label>
+                    <div class="form-group">
+                        <label for="lengthInMeters" class="col-sm-2 control-label">Length In Meters</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="lengthInMeters" placeholder="10000" value="10000" />
+                        </div>
                     </div>
-                </div>
-                <div class="col-sm-offset-2 col-sm-10">
-                    <div class="checkbox">
-                        <label><input id="checkbox3" type="checkbox" value="Ferry">Ferry</label>
+                    <div class="form-group">
+                        <label for="travelHeading" class="col-sm-2 control-label">Travel Heading</label>
+                        <div class="col-sm-4">
+                            <select class="form-control" id="travelHeading" aria-describedby="helpBlock1">
+                                <option value="0" selected>Any</option>
+                                <option value="1">North</option>
+                                <option value="2">Northeast</option>
+                                <option value="3">East</option>
+                                <option value="4">Southeast</option>
+                                <option value="5">South</option>
+                                <option value="6">Southwest</option>
+                                <option value="7">West</option>
+                                <option value="8">Northwest</option>
+                            </select>
+                            <span id="helpBlock1" class="help-block">North, South, etc.</span>
+                        </div>
                     </div>
-                </div>
-                <div class="col-sm-offset-2 col-sm-10">
-                    <div class="checkbox">
-                        <label><input id="checkbox4" type="checkbox" value="Unpaved">Unpaved</label>
+                    <div class="form-group">
+                        <label for="travelDirection" class="col-sm-2 control-label">Travel Direction</label>
+                        <div class="col-sm-4">
+                            <select class="form-control" id="travelDirection" aria-describedby="helpBlock2">
+                                <option value="0" selected>Clockwise</option>
+                                <option value="1">Counter-Clockwise</option>
+                            </select>
+                            <span id="helpBlock2" class="help-block">Think of this in terms of right and left turns. CW: more right turns. CCW: more left turns.</span>
+                        </div>
                     </div>
-                </div>
-                <div class="col-sm-offset-2 col-sm-10">
-                    <div class="checkbox">
-                        <label><input id="checkbox5" type="checkbox" value="Approximate Seasonal Closure">Approximate Seasonal Closure (Seasonal roads may not be selected with 100% accuracy)</label>
+                    <div class="form-group">
+                        <label for="unit" class="col-sm-2 control-label">Unit</label>
+                        <div class="col-sm-4">
+                            <select class="form-control" id="unit">
+                                <option value="k" selected>Kilometers</option>
+                                <option value="m">Miles</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
-                <div class="col-sm-offset-2 col-sm-10">
-                    <div class="checkbox">
-                        <label><input id="checkbox6" type="checkbox" value="Country Border Crossing">Country Border Crossing</label>
+                    <div class="form-group">
+                        <label for="routeType" class="col-sm-2 control-label">Route Type</label>
+                        <div class="col-sm-4">
+                            <select class="form-control" id="routeType">
+                                <option value="fastest" selected>Car/Motorcycle</option>
+                                <option value="bicycle">Bicycle</option>
+                                <option value="pedestrian">Pedestrian</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
-                <div class="col-sm-offset-2 col-sm-10">
-                    <div class="checkbox">
-                        <label><input id="checkbox7" type="checkbox" value="Bridge">Bridge</label>
+                    <div class="form-group">
+                        <label for="locale" class="col-sm-2 control-label">Locale</label>
+                        <div class="col-sm-4">
+                            <select class="form-control" id="locale">
+                                <option value="en_US" selected>en_US</option>
+                                <option value="en_GB">en_GB</option>
+                                <option value="fr_CA">fr_CA</option>
+                                <option value="fr_FR">fr_FR</option>
+                                <option value="de_DE">de_DE</option>
+                                <option value="es_ES">es_ES</option>
+                                <option value="es_MX">es_MX</option>
+                                <option value="ru_RU">ru_RU</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
-                <div class="col-sm-offset-2 col-sm-10">
-                    <div class="checkbox">
-                        <label><input id="checkbox8" type="checkbox" value="Tunnel">Tunnel</label>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Avoids</label>
+                        <div class="col-sm-10">
+                            <div class="checkbox">
+                                <label><input id="checkbox1" type="checkbox" value="Limited Access" checked>Limited Access (highways)</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <div class="checkbox">
+                                <label><input id="checkbox2" type="checkbox" value="Toll Road">Toll Road</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <div class="checkbox">
+                                <label><input id="checkbox3" type="checkbox" value="Ferry">Ferry</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <div class="checkbox">
+                                <label><input id="checkbox4" type="checkbox" value="Unpaved">Unpaved</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <div class="checkbox">
+                                <label><input id="checkbox5" type="checkbox" value="Approximate Seasonal Closure">Approximate Seasonal Closure (Seasonal roads may not be selected with 100% accuracy)</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <div class="checkbox">
+                                <label><input id="checkbox6" type="checkbox" value="Country Border Crossing">Country Border Crossing</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <div class="checkbox">
+                                <label><input id="checkbox7" type="checkbox" value="Bridge">Bridge</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <div class="checkbox">
+                                <label><input id="checkbox8" type="checkbox" value="Tunnel">Tunnel</label>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                    <div class="form-group">
+                        <label for="cyclingRoadFactor" class="col-sm-2 control-label">Cycling Road Factor</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="cyclingRoadFactor" placeholder="1.0" value="1.0" aria-describedby="helpBlock3" />
+                            <span id="helpBlock3" class="help-block">Sets the cycling road favoring factor. A value of < 1 favors cycling on non-bike lane roads. Values are clamped to the range 0.1 to 100.0.</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="roadGradeStrategy" class="col-sm-2 control-label">Road Grade Strategy</label>
+                        <div class="col-sm-4">
+                            <select class="form-control" id="roadGradeStrategy" aria-describedby="helpBlock4">
+                                <option value="DEFAULT_STRATEGY" selected>DEFAULT_STRATEGY</option>
+                                <option value="AVOID_UP_HILL">AVOID_UP_HILL</option>
+                                <option value="AVOID_DOWN_HILL">AVOID_DOWN_HILL</option>
+                                <option value="AVOID_ALL_HILLS">AVOID_ALL_HILLS</option>
+                                <option value="FAVOR_UP_HILL">FAVOR_UP_HILL</option>
+                                <option value="FAVOR_DOWN_HILL">FAVOR_DOWN_HILL</option>
+                                <option value="FAVOR_ALL_HILLS">FAVOR_ALL_HILLS</option>
+                            </select>
+                            <span id="helpBlock4" class="help-block">Specifies the road grade avoidance strategies to be used for each leg. This parameter is only for bicycle routes.</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="numberOfItems" class="col-sm-2 control-label">Number Of Items</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="numberOfItems" placeholder="10" value="10" />
+                        </div>
+                    </div>
+                    <br />
+                    <button type="submit" class="col-sm-offset-2 btn btn-lg btn-success">Calculate Routes</button>
+                </form>
             </div>
-            <div class="form-group">
-                <label for="cyclingRoadFactor" class="col-sm-2 control-label">Cycling Road Factor</label>
-                <div class="col-sm-4">
-                    <input type="text" class="form-control" id="cyclingRoadFactor" placeholder="1.0" value="1.0" aria-describedby="helpBlock3" />
-                    <span id="helpBlock3" class="help-block">Sets the cycling road favoring factor. A value of < 1 favors cycling on non-bike lane roads. Values are clamped to the range 0.1 to 100.0.</span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="roadGradeStrategy" class="col-sm-2 control-label">Road Grade Strategy</label>
-                <div class="col-sm-4">
-                    <select class="form-control" id="roadGradeStrategy" aria-describedby="helpBlock4">
-                        <option value="DEFAULT_STRATEGY" selected>DEFAULT_STRATEGY</option>
-                        <option value="AVOID_UP_HILL">AVOID_UP_HILL</option>
-                        <option value="AVOID_DOWN_HILL">AVOID_DOWN_HILL</option>
-                        <option value="AVOID_ALL_HILLS">AVOID_ALL_HILLS</option>
-                        <option value="FAVOR_UP_HILL">FAVOR_UP_HILL</option>
-                        <option value="FAVOR_DOWN_HILL">FAVOR_DOWN_HILL</option>
-                        <option value="FAVOR_ALL_HILLS">FAVOR_ALL_HILLS</option>
-                    </select>
-                    <span id="helpBlock4" class="help-block">Specifies the road grade avoidance strategies to be used for each leg. This parameter is only for bicycle routes.</span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="numberOfItems" class="col-sm-2 control-label">Number Of Items</label>
-                <div class="col-sm-4">
-                    <input type="text" class="form-control" id="numberOfItems" placeholder="10" value="10" />
-                </div>
-            </div>
-            <br />
-            <button type="submit" class="col-sm-offset-2 btn btn-lg btn-success">Calculate Routes</button>
-        </form>
-
-        <div class="page-header">
-            <h1>Results</h1>
+            <div class="col-sm-4" id="results"></div>
         </div>
     </div>
     <!-- // -->
@@ -198,9 +195,12 @@
 
                 console.log(request);
 
-                $.post("https://routegenius.mybluemix.net/api/route", JSON.stringify(request), function(data) {
-                    console.log(data);
-                });
+                $.post("https://routegenius.mybluemix.net/api/route", JSON.stringify(request),
+                    function(data) {
+                        for (var i = 0; i < data.length; i++) {
+                            $('#results').append('<div class="col-sm-6"><div class="panel panel-default"><div class="panel-body"><img src="' + data[i].thumbnail + '" class="img-responsive" /></div><div class="panel-footer">' + data[i].distance + '</div></div></div>');
+                        }
+                    });
             });
         });
         

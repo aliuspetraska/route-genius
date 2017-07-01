@@ -486,7 +486,9 @@ namespace RouteGenius.Controllers
         
         private static string GetStaticMapImage(IReadOnlyList<LatLng> cleaned)
         {
-            var mapUrl = "https://open.mapquestapi.com/staticmap/v5/map?key=" + MapQuestApiKey + "&shape=weight:2|border:ff0000|" + PointsBuilder(cleaned, "|") + "&size=400,400&type=light";
+            var startPoint = cleaned[0].Lat + "," + cleaned[0].Lng;
+            
+            var mapUrl = "https://open.mapquestapi.com/staticmap/v5/map?key=" + MapQuestApiKey + "&shape=weight:2|border:ff0000|" + PointsBuilder(cleaned, "|") + "&shape=weight:2|border:ff0000|fill:ff0000|radius:1km|" + startPoint + "&size=400,400&type=light&margin=100";
             
             return mapUrl;
         }
