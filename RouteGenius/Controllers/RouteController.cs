@@ -44,7 +44,7 @@ namespace RouteGenius.Controllers
                 
                     response.Add(new Result
                     {
-                        UniqueId = GenerateUniqueId(cleaned),
+                        UniqueId = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString(),
                         Coordinates = cleaned,
                         DistanceInMeters = CalculateTotalDistance(cleaned),
                         ThumbnailUrl = GetStaticMapImage(cleaned)
