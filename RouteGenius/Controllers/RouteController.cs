@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -41,15 +42,12 @@ namespace RouteGenius.Controllers
                     var cleaned = CleanDuplicates(
                         CleanTails(result));
                 
-                    var distance = CalculateTotalDistance(cleaned);
-                
-                    var thumbnail = GetStaticMapImage(cleaned);
-                
                     response.Add(new Result
                     {
+                        UniqueId = GenerateUniqueId(cleaned),
                         Coordinates = cleaned,
-                        Distance = distance,
-                        Thumbnail = thumbnail
+                        DistanceInMeters = CalculateTotalDistance(cleaned),
+                        ThumbnailUrl = GetStaticMapImage(cleaned)
                     });
                 }
             
@@ -61,54 +59,10 @@ namespace RouteGenius.Controllers
             }
         }
 
-        [HttpGet]
-        public JsonResult Get()
+        private static string GenerateUniqueId(IEnumerable<LatLng> cleaned)
         {
-            var parameters = new RequestParameters
-            {
-                StartLocation = new Coordinates
-                {
-                    Lat = 54.69422,
-                    Lng = 25.28386
-                },
-                LengthInMeters = 10000,
-                TravelHeading = 0,
-                TravelDirection = 0,
-                Unit = "k",
-                RouteType = "fastest",
-                Locale = "en_US",
-                Avoids = new List<string>
-                {
-                    "Ferry", "Toll Road", "Country Border Crossing"
-                },
-                CyclingRoadFactor = 1.0,
-                RoadGradeStrategy = "DEFAULT_STRATEGY",
-                DrivingStyle = 2,
-                NumberOfItems = 25
-            };
-
-            var results = GetExactNumberOfUniqueOpenDirections(parameters);
-            
-            var response = new List<Result>();
-
-            foreach (var result in results)
-            {
-                var cleaned = CleanDuplicates(
-                    CleanTails(result));
-                
-                var distance = CalculateTotalDistance(cleaned);
-                
-                var thumbnail = GetStaticMapImage(cleaned);
-                
-                response.Add(new Result
-                {
-                    Coordinates = cleaned,
-                    Distance = distance,
-                    Thumbnail = thumbnail
-                });
-            }
-            
-            return Json(response);
+            var bytes = Encoding.UTF8.GetBytes(string.Join(string.Empty, cleaned));
+            return Convert.ToBase64String(bytes);
         }
 
         private static IEnumerable<OpenDirections> GetExactNumberOfUniqueOpenDirections(RequestParameters parameters)

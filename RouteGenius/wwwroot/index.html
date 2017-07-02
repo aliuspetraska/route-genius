@@ -198,7 +198,7 @@
                 $.post("https://routegenius.mybluemix.net/api/route", JSON.stringify(request),
                     function(data) {
                         for (var i = 0; i < data.length; i++) {
-                            $('#results').append('<div class="col-sm-6"><div class="panel panel-default"><div class="panel-body"><img src="' + data[i].thumbnail + '" class="img-responsive" /></div><div class="panel-footer">' + data[i].distance + '</div></div></div>');
+                            $('#results').append('<div class="col-sm-6"><div class="panel panel-default"><div class="panel-body"><img src="' + data[i].thumbnailUrl + '" class="img-responsive" /></div><div class="panel-footer">' + data[i].distanceInMeters + '</div></div></div>');
                         }
                     });
             });

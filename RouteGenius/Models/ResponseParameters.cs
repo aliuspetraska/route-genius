@@ -14,10 +14,13 @@ namespace RouteGenius.Models
         [JsonProperty("coordinates")]
         public List<LatLng> Coordinates { get; set; }
         
-        [JsonProperty("distance")]
-        public double Distance { get; set; }
+        [JsonProperty("distanceInMeters")]
+        public double DistanceInMeters { get; set; }
         
-        [JsonProperty("thumbnail")]
-        public string Thumbnail { get; set; }
+        [JsonProperty("thumbnailUrl")]
+        public string ThumbnailUrl { get; set; }
+
+        [JsonProperty("uniqueId")]
+        public string UniqueId { get; set; }
     }
 }
