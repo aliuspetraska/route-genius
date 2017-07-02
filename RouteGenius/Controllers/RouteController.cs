@@ -438,6 +438,7 @@ namespace RouteGenius.Controllers
             
             var mapUrl = "https://open.mapquestapi.com/staticmap/v5/map?key=" + MapQuestApiKey + "&shape=weight:2|border:ff0000|" + PointsBuilder(cleaned, "|") + "&shape=weight:2|border:ff0000|fill:ff0000|radius:0.1km|" + startPoint + "&size=400,400&type=light&margin=100";
 
+            /*
             var test = Task.WhenAll(DownloadImage(mapUrl)).Result;
             
             using (var inputStream = new SKManagedStream(test.FirstOrDefault()))
@@ -453,6 +454,7 @@ namespace RouteGenius.Controllers
                     }
                 }
             }
+            */
 
             return mapUrl;
         }
