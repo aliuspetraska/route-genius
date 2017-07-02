@@ -5,11 +5,11 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using RouteGenius.Models;
+using SkiaSharp;
 
 namespace RouteGenius.Controllers
 {
@@ -57,12 +57,6 @@ namespace RouteGenius.Controllers
             {
                 return Json(new object());
             }
-        }
-
-        private static string GenerateUniqueId(IEnumerable<LatLng> cleaned)
-        {
-            var bytes = Encoding.UTF8.GetBytes(string.Join(string.Empty, cleaned));
-            return Convert.ToBase64String(bytes);
         }
 
         private static IEnumerable<OpenDirections> GetExactNumberOfUniqueOpenDirections(RequestParameters parameters)
@@ -443,8 +437,32 @@ namespace RouteGenius.Controllers
             var startPoint = cleaned[0].Lat + "," + cleaned[0].Lng;
             
             var mapUrl = "https://open.mapquestapi.com/staticmap/v5/map?key=" + MapQuestApiKey + "&shape=weight:2|border:ff0000|" + PointsBuilder(cleaned, "|") + "&shape=weight:2|border:ff0000|fill:ff0000|radius:0.1km|" + startPoint + "&size=400,400&type=light&margin=100";
+
+            var test = Task.WhenAll(DownloadImage(mapUrl)).Result;
             
+            using (var inputStream = new SKManagedStream(test.FirstOrDefault()))
+            {
+                using (var original = SKBitmap.Decode(inputStream))
+                {
+                    using (var image = SKImage.FromBitmap(original))
+                    {
+                        var path = Path.Combine(Directory.GetCurrentDirectory(), "test.jpg");
+                        var output = System.IO.File.OpenWrite(path);
+                            
+                        image.Encode(SKEncodedImageFormat.Jpeg, 75).SaveTo(output);
+                    }
+                }
+            }
+
             return mapUrl;
+        }
+
+        private static async Task<Stream> DownloadImage(string mapUrl)
+        {
+            var response = await HttpClient.GetAsync(mapUrl);
+            var input = await response.Content.ReadAsStreamAsync();
+            
+            return input;
         }
         
         private static string PointsBuilder(IReadOnlyList<LatLng> cleaned, string separator)
